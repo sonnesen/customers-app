@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: customers-app
+
+  # Database configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/customersdb
+    username: dbuser
+    password: dbpassword
+    driver-class-name: org.postgresql.Driver
+
+  # JPA configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  graphql:
+    schema:
+      locations:
+        - classpath:/graphql/
+      file-extensions:
+        - .graphqls
+    graphiql:
+      enabled: true
