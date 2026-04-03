@@ -1,0 +1,282 @@
+openapi: 3.0.3
+info:
+  title: Customers API
+  description: API for managing customer data
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development server
+
+tags:
+  - name: Customers
+    description: Operations related to customers
+
+paths:
+  /v1/customers:
+    get:
+      tags:
+        - Customers
+      summary: Get all customers
+      description: Retrieve a list of all customers
+      operationId: getAllCustomers
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: perPage
+          in: query
+          description: Number of customers per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedCustomersResponse"
+        "500":
+          description: Internal server error
+
+    post:
+      tags:
+        - Customers
+      summary: Create a new customer
+      description: Create a new customer record
+      operationId: createCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCustomerRequest"
+      responses:
+        "201":
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCustomerResponse"
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /v1/customers/{customerId}:
+    get:
+      tags:
+        - Customers
+      summary: Get customer by ID
+      description: Retrieve a specific customer by ID
+      operationId: getCustomerById
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+        "404":
+          description: Customer not found
+        "500":
+          description: Internal server error
+
+    put:
+      tags:
+        - Customers
+      summary: Update customer
+      description: Update an existing customer
+      operationId: updateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCustomerRequest"
+      responses:
+        "200":
+          description: Customer updated successfully
+        "400":
+          description: Bad request
+        "404":
+          description: Customer not found
+        "500":
+          description: Internal server error
+  /v1/customers/{customerId}/activate:
+    patch:
+      tags:
+        - Customers
+      summary: Activate customer
+      description: Activate a customer by ID
+      operationId: activateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Customer activated successfully
+        "404":
+          description: Customer not found
+        "500":
+          description: Internal server error
+  /v1/customers/{customerId}/deactivate:
+    patch:
+      tags:
+        - Customers
+      summary: Deactivate customer
+      description: Deactivate a customer by ID
+      operationId: deactivateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Customer deactivated successfully
+        "404":
+          description: Customer not found
+        "500":
+          description: Internal server error
+
+components:
+  schemas:
+    CreateCustomerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Customer full name
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          description: Customer email address
+        phoneNumber:
+          type: string
+          description: Customer phone number
+          maxLength: 20
+        cpf:
+          type: string
+          description: Customer CPF number without formatting
+          maxLength: 11
+      required:
+        - name
+        - email
+        - phoneNumber
+        - cpf
+    CreateCustomerResponse:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          description: Customer unique customerIdentifier
+    UpdateCustomerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Customer full name
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          description: Customer email address
+        phoneNumber:
+          type: string
+          description: Customer phone number
+          maxLength: 20
+        cpf:
+          type: string
+          description: Customer CPF number without formatting
+          maxLength: 11
+      required:
+        - name
+        - email
+        - phoneNumber
+        - cpf
+    PaginatedCustomersResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        perPage:
+          type: integer
+          description: Number of customers per page
+        totalItems:
+          type: integer
+          format: int64
+          description: Total number of customers
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerResponse"
+    CustomerResponse:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          description: Customer unique customerIdentifier
+        name:
+          type: string
+          description: Customer full name
+        email:
+          type: string
+          format: email
+          description: Customer email address
+        phoneNumber:
+          type: string
+          description: Customer phone number
+        cpf:
+          type: string
+          description: Customer CPF number
+        active:
+          type: boolean
+          description: Customer active status
+        createdAt:
+          type: string
+          format: date-time
+          description: Customer creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Customer last update timestamp

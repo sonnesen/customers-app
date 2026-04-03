@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>4.0.5</version>
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sonnesen</groupId>
 	<artifactId>customers-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>customers-app</name>
 	<description>Demo project for Spring Boot</description>
-	<url/>
+	<url />
 	<licenses>
-		<license/>
+		<license />
 	</licenses>
 	<developers>
-		<developer/>
+		<developer />
 	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection />
+		<developerConnection />
+		<tag />
+		<url />
 	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>21</java.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
-		<swagger-codegen-maven-plugin.version>3.0.71</swagger-codegen-maven-plugin.version>
-		<swagger-annotations.version>2.2.38</swagger-annotations.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.8.9</springdoc-openapi-starter-webmvc-ui.version>
-		<jackson-databind-nullable.version>0.2.7</jackson-databind-nullable.version>
-		<postgresql.version>42.7.8</postgresql.version>
+		<springdoc-openapi-starter-webmvc-ui.version>3.0.2</springdoc-openapi-starter-webmvc-ui.version>
+		<jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
+		<openapi-generator-maven-plugin.version>7.21.0</openapi-generator-maven-plugin.version>
+		<versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -83,11 +83,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-annotations</artifactId>
-			<version>${swagger-annotations.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
@@ -103,11 +98,11 @@
 			<version>${mapstruct.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>${mapstruct.version}</version>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -117,9 +112,9 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>io.swagger.codegen.v3</groupId>
-				<artifactId>swagger-codegen-maven-plugin</artifactId>
-				<version>3.0.73</version>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>customers</id>
@@ -127,16 +122,18 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/api/customers.yml</inputSpec>
-							<language>spring</language>
-							<generateSupportingFiles>false</generateSupportingFiles>
-							<apiPackage>com.sonnesen.customers.api</apiPackage>
-							<modelPackage>com.sonnesen.customers.model</modelPackage>
-							<modelNameSuffix>DTO</modelNameSuffix>
+							<inputSpec>
+								${project.basedir}/src/main/resources/openapi/customers-api.yml</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>com.sonnesen.customerservice.adapters.inbound.rest</apiPackage>
+							<modelPackage>com.sonnesen.customerservice.adapters.inbound.rest.model</modelPackage>
 							<configOptions>
+								<useTags>true</useTags>
+								<useSpringBoot3>true</useSpringBoot3>
 								<interfaceOnly>true</interfaceOnly>
-								<jakarta>true</jakarta>
-								<java8>true</java8>
+								<dateLibrary>java8</dateLibrary>
+								<useBeanValidation>true</useBeanValidation>
+								<importMappings>Nullable=org.jspecify.annotations.Nullable</importMappings>
 							</configOptions>
 						</configuration>
 					</execution>
@@ -169,7 +166,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
@@ -194,6 +190,27 @@
 					</compilerArgs>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${versions-maven-plugin.version}</version>
+				<configuration>
+					<allowSnapshots>false</allowSnapshots>
+					<ruleSet>
+						<ignoreVersions>
+							<ignoreVersion>
+								<type>regex</type>
+								<version>(?i).*[.-](alpha|beta|rc|m)\d*.*</version>
+							</ignoreVersion>
+						</ignoreVersions>
+					</ruleSet>
+					<allowMajorUpdates>true</allowMajorUpdates>
+					<allowMinorUpdates>true</allowMinorUpdates>
+					<generateBackupPoms>true</generateBackupPoms>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 

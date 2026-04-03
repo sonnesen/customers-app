@@ -1,0 +1,110 @@
+### Register a new customer
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@mail.com",
+    "phoneNumber": "47999999999",
+    "cpf": "12345678901"
+}
+
+### List customers with pagination
+GET http://localhost:8080/v1/customers?page=0&size=10
+
+### Get a customer by ID
+GET http://localhost:8080/v1/customers/1
+
+### Update a customer
+PUT http://localhost:8080/v1/customers/1
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@mail.com",
+    "phoneNumber": "48999999999",
+    "cpf": "12345678901"
+}
+
+### Deactivate a customer
+PATCH http://localhost:8080/v1/customers/1/deactivate
+
+### Activate a customer
+PATCH http://localhost:8080/v1/customers/1/activate
+
+### Try to create a new customer with an existing email (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "Jane Doe",
+    "email": "john.doe@mail.com",
+    "phoneNumber": "47988888888",
+    "cpf": "10987654321"
+}
+
+### Try to create a new customer with an existing CPF (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "Jane Doe",
+    "email": "jane.doe@mail.com",
+    "phoneNumber": "47988888888",
+    "cpf": "12345678901"
+}
+
+### Try to create a new customer with missing required fields (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "email": "paul.senior@mail.com"
+}
+
+### Try to create a new customer with too long name (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "This is a very long name that exceeds the maximum allowed length of 255 characters. It should trigger a validation error when trying to create a new customer in the system.",
+    "email": "jim.cavizel@mail.com",
+    "phoneNumber": "47977777777",
+    "cpf": "10987654322"
+}
+
+### Try to create a new customer with invalid email format (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "Emily Blunt",
+    "email": "emily.blunt-at-mail.com",
+    "phoneNumber": "47966666666",
+    "cpf": "10987654323"
+}
+
+### Try to create a new customer with invalid phone number format (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "Michael Fassbender",
+    "email": "michael.fass@mail.com",
+    "phoneNumber": "invalid-phone-number",
+    "cpf": "10987654324"
+}
+
+### Try to create a new customer with invalid CPF format (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "Scarlett Johansson",
+    "email": "scarlett.johansson@mail.com",
+    "phoneNumber": "47955555555",
+    "cpf": "invalid-cpf"
+}
+
+### Try to get a non-existing customer (should return an error)
+GET http://localhost:8080/v1/customers/999
