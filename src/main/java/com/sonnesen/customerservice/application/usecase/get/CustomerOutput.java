@@ -8,10 +8,9 @@ public record CustomerOutput(Long customerId, String name, String email, String 
         boolean active, Instant createdAt, Instant updatedAt) {
 
     public static CustomerOutput from(final Customer customer) {
-        return new CustomerOutput(customer.getId().getValue(), customer.getName(), customer.getEmail().getValue(),
-                customer.getPhoneNumber().getValue(), customer.getCpf().getValue(), customer.isActive(),
-                customer.getAuditInfo() != null ? customer.getAuditInfo().getCreatedAt() : null,
-                customer.getAuditInfo() != null ? customer.getAuditInfo().getUpdatedAt() : null);
+        return new CustomerOutput(customer.getId().getValue(), customer.getCustomerName().getValue(),
+                customer.getEmail().getValue(), customer.getPhoneNumber().getValue(), customer.getCpf().getValue(),
+                customer.isActive(), customer.getAuditInfo().getCreatedAt(), customer.getAuditInfo().getUpdatedAt());
     }
 
 }

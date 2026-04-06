@@ -182,18 +182,22 @@ components:
           type: string
           description: Customer full name
           minLength: 1
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
           description: Customer email address
+          minLength: 1
+          maxLength: 255
         phoneNumber:
           type: string
           description: Customer phone number
-          maxLength: 20
+          pattern: "^[0-9]{10,11}$"
+          maxLength: 11
         cpf:
           type: string
           description: Customer CPF number without formatting
+          pattern: "^[0-9]{11}$"
           maxLength: 11
       required:
         - name
@@ -206,7 +210,7 @@ components:
         customerId:
           type: integer
           format: int64
-          description: Customer unique customerIdentifier
+          description: Customer unique identifier
     UpdateCustomerRequest:
       type: object
       properties:
@@ -214,18 +218,22 @@ components:
           type: string
           description: Customer full name
           minLength: 1
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
           description: Customer email address
+          minLength: 1
+          maxLength: 255
         phoneNumber:
           type: string
           description: Customer phone number
-          maxLength: 20
+          pattern: "^[0-9]{10,11}$"
+          maxLength: 11
         cpf:
           type: string
           description: Customer CPF number without formatting
+          pattern: "^[0-9]{11}$"
           maxLength: 11
       required:
         - name
@@ -255,7 +263,7 @@ components:
         customerId:
           type: integer
           format: int64
-          description: Customer unique customerIdentifier
+          description: Customer unique identifier
         name:
           type: string
           description: Customer full name
@@ -268,7 +276,7 @@ components:
           description: Customer phone number
         cpf:
           type: string
-          description: Customer CPF number
+          description: Customer CPF number without formatting
         active:
           type: boolean
           description: Customer active status

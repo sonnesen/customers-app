@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.sonnesen.customerservice.domain.exception.CPFAlreadyInUseException;
 import com.sonnesen.customerservice.domain.exception.DomainException;
 import com.sonnesen.customerservice.domain.exception.EmailAlreadyInUseException;
-import com.sonnesen.customerservice.domain.exception.InvalidCPFFormatException;
-import com.sonnesen.customerservice.domain.exception.InvalidEmailFormatException;
-import com.sonnesen.customerservice.domain.exception.InvalidPhoneNumberFormatException;
+import com.sonnesen.customerservice.domain.exception.InvalidCPFException;
+import com.sonnesen.customerservice.domain.exception.InvalidCustomerIdException;
+import com.sonnesen.customerservice.domain.exception.InvalidCustomerNameException;
+import com.sonnesen.customerservice.domain.exception.InvalidEmailException;
+import com.sonnesen.customerservice.domain.exception.InvalidPageException;
+import com.sonnesen.customerservice.domain.exception.InvalidPhoneNumberException;
 import com.sonnesen.customerservice.domain.exception.NotFoundException;
 
 @RestControllerAdvice
@@ -33,8 +36,9 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler({ InvalidEmailFormatException.class, InvalidPhoneNumberFormatException.class,
-            InvalidCPFFormatException.class })
+    @ExceptionHandler({ InvalidEmailException.class, InvalidPhoneNumberException.class,
+            InvalidCPFException.class, InvalidPageException.class, InvalidCustomerNameException.class,
+            InvalidCustomerIdException.class })
     public ProblemDetail handleInvalidFormatExceptions(final DomainException ex) {
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
         problemDetail.setTitle("Bad Request");

@@ -106,5 +106,16 @@ Content-Type: application/json
     "cpf": "invalid-cpf"
 }
 
+### Try to create a new customer with empty email (should return an error)
+POST http://localhost:8080/v1/customers
+Content-Type: application/json
+
+{
+    "name": "Chris Evans",
+    "email": "",
+    "phoneNumber": "47944444444",
+    "cpf": "10987654325"
+}
+
 ### Try to get a non-existing customer (should return an error)
 GET http://localhost:8080/v1/customers/999

@@ -7,7 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 import com.sonnesen.customerservice.adapters.outbound.persistence.mapper.CustomerPersistenceMapper;
 import com.sonnesen.customerservice.adapters.outbound.persistence.repository.CustomerJpaRepository;
+import com.sonnesen.customerservice.domain.model.CPF;
 import com.sonnesen.customerservice.domain.model.Customer;
+import com.sonnesen.customerservice.domain.model.CustomerId;
+import com.sonnesen.customerservice.domain.model.Email;
 import com.sonnesen.customerservice.domain.model.Page;
 import com.sonnesen.customerservice.domain.model.Pagination;
 import com.sonnesen.customerservice.ports.outbound.persistence.repository.CustomerRepositoryPort;
@@ -35,14 +38,14 @@ public class CustomerRepositoryAdapter implements CustomerRepositoryPort {
     }
 
     @Override
-    public boolean existsByEmail(final String email) {
-        return customerJpaRepository.existsByEmail(email);
+    public boolean existsByEmail(final Email email) {
+        return customerJpaRepository.existsByEmail(email.getValue());
     }
 
     @Override
-    public Optional<Customer> findById(final Long customerId) {
+    public Optional<Customer> findById(final CustomerId customerId) {
         Objects.requireNonNull(customerId, CUSTOMER_ID_MUST_NOT_BE_NULL);
-        return customerJpaRepository.findById(customerId).map(customerMapper::toDomain);
+        return customerJpaRepository.findById(customerId.getValue()).map(customerMapper::toDomain);
     }
 
     @Override
@@ -69,8 +72,8 @@ public class CustomerRepositoryAdapter implements CustomerRepositoryPort {
     }
 
     @Override
-    public boolean existsByCpf(final String cpf) {
-        return customerJpaRepository.existsByCpf(cpf);
+    public boolean existsByCpf(final CPF cpf) {
+        return customerJpaRepository.existsByCpf(cpf.getValue());
     }
 
 }

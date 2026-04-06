@@ -10,6 +10,7 @@ import com.sonnesen.customerservice.domain.model.AuditInfo;
 import com.sonnesen.customerservice.domain.model.CPF;
 import com.sonnesen.customerservice.domain.model.Customer;
 import com.sonnesen.customerservice.domain.model.CustomerId;
+import com.sonnesen.customerservice.domain.model.CustomerName;
 import com.sonnesen.customerservice.domain.model.Email;
 import com.sonnesen.customerservice.domain.model.PhoneNumber;
 
@@ -23,7 +24,7 @@ public interface CustomerPersistenceMapper {
 
         return Customer.with(
                 toCustomerId(entity.getId()),
-                entity.getName(),
+                toCustomerName(entity.getName()),
                 toEmail(entity.getEmail()),
                 toPhoneNumber(entity.getPhoneNumber()),
                 toCpf(entity.getCpf()),
@@ -32,15 +33,20 @@ public interface CustomerPersistenceMapper {
     }
 
     @Mapping(target = "id", expression = "java(customer.getId() != null ? customer.getId().getValue() : null)")
-    @Mapping(target = "email", expression = "java(customer.getEmail().getValue())")
-    @Mapping(target = "phoneNumber", expression = "java(customer.getPhoneNumber().getValue())")
-    @Mapping(target = "cpf", expression = "java(customer.getCpf().getValue())")
+    @Mapping(target = "name", expression = "java(customer.getCustomerName() != null ? customer.getCustomerName().getValue() : null)")
+    @Mapping(target = "email", expression = "java(customer.getEmail() != null ? customer.getEmail().getValue() : null)")
+    @Mapping(target = "phoneNumber", expression = "java(customer.getPhoneNumber() != null ? customer.getPhoneNumber().getValue() : null)")
+    @Mapping(target = "cpf", expression = "java(customer.getCpf() != null ? customer.getCpf().getValue() : null)")
     @Mapping(target = "createdAt", expression = "java(customer.getAuditInfo() != null ? customer.getAuditInfo().getCreatedAt() : null)")
     @Mapping(target = "updatedAt", expression = "java(customer.getAuditInfo() != null ? customer.getAuditInfo().getUpdatedAt() : null)")
     CustomerJpaEntity toEntity(Customer customer);
 
     default CustomerId toCustomerId(Long id) {
         return id == null ? null : CustomerId.of(id);
+    }
+
+    default CustomerName toCustomerName(String name) {
+        return name == null ? null : CustomerName.of(name);
     }
 
     default Email toEmail(String value) {

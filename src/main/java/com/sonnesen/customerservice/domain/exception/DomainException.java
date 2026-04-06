@@ -1,11 +1,8 @@
 package com.sonnesen.customerservice.domain.exception;
 
-public class DomainException extends RuntimeException {
-    public DomainException(String message) {
-        this(message, null);
-    }
+public abstract class DomainException extends RuntimeException {
 
-    public DomainException(String message, Throwable cause) {
-        super(message, cause, true, false);
+    protected DomainException(final String message) {
+        super(message, null, true, false);
     }
 }
